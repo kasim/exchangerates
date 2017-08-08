@@ -37,12 +37,17 @@ var historical = function(date) {
     });    
 }
 
-function setHistorical(date){
-    historical(date).then(setCache(date));
-}
+//function setHistorical(date){
+//    historical(date).then(setCache(date));
+//}
 
-function setLatest(date){
-    latest.then(setCache(date));
+//function setLatest(date){
+//    latest.then(setCache(date));
+//}
+
+function getRates(date){
+    if(date === dateFormat(new Date(), 'yyyy-mm-dd')) latest.then(setCache(date));
+    else  historical(date).then(setCache(date));
 }
 
 function setCache(date){
@@ -53,7 +58,7 @@ function setCache(date){
 
 function getCache(date){
     var localCache = fxCache.get(date);
-    if (localCache == undefined) setLatest(date);
+    if (localCache == undefined) setRates(date);
     else fx = localCache;
 }
 
@@ -90,6 +95,6 @@ router.get('/latest/:curr/base/:base', function(req, res) {
 
 app.use('/api', router);
 
-app.listen(3000, function() {
-    console.log('Exchange rate app listening on port 3000!');
+app.listen(8080, function() {
+    console.log('Exchange rate app listening on port 8080!');
 });
