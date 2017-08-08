@@ -73,9 +73,19 @@ router.get('/latest/:curr/base/:base', function(req, res) {
     res.json({base: req.params.base, rates:fx(1).from(req.params.base).to(req.params.curr), timestamp:dateFormat(new Date(), 'yyyy-mm-dd')})
 });
 
+router.get('/historical/:date/all', function(req, res) {
+    getCache(req.params.date);
+    res.json({base: fx.base, rates:fx.rates, timestamp:req.params.date})
+});
+
 router.get('/historical/:date/:curr', function(req, res) {
     getCache(req.params.date);
     res.json({base: fx.base, rates:fx.rates[req.params.curr], timestamp:req.params.date})
+});
+
+router.get('/latest/:curr/base/:base', function(req, res) {
+    getCache(dateFormat(new Date(), 'yyyy-mm-dd'));
+    res.json({base: req.params.base, rates:fx(1).from(req.params.base).to(req.params.curr), timestamp:dateFormat(new Date(), 'yyyy-mm-dd')})
 });
 
 app.use('/api', router);
