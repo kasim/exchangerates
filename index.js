@@ -43,15 +43,19 @@ function getRates(date){
 }
 
 function setCache(date){
-    fxCache.set(date, fx, function( err, success ){
+    fxCache.set(date, fx.rates, function( err, success ){
 	if( !err && success ) console.log( "Date : " + date + " save in cache!" );
     });
 }
 
 function getCache(date){
-    var localCache = fxCache.get(date);
-    if (localCache == undefined) getRates(date);
-    else fx = localCache;
+    var cacheRates = fxCache.get(date);
+    if (cacheRates == undefined) getRates(date);
+    else { 
+	fx.rates = cacheRates;
+	fx.timestamp = date;
+	fx.base = "USD";
+    }
 }
 
 router.get('/latest/all', function(req, res) {
