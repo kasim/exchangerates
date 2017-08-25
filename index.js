@@ -5,6 +5,8 @@ const express = require('express'),
 
 var grates = require('./lib/get-rates.js');
 
+app.set('port', (process.env.PORT || 5000));
+
 router.get('/latest/all', function(req, res) {
     grates.getCache(dateFormat(new Date(), 'yyyy-mm-dd'));
     res.json({base: grates.fx.base, rates:grates.fx.rates, date:dateFormat(new Date(), 'yyyy-mm-dd')});
@@ -37,6 +39,6 @@ router.get('/historical/:date/:curr/base/:base', function(req, res) {
 
 app.use('/api', router);
 
-app.listen(8080, function() {
-    console.log('Exchange rate app listening on port 8080!');
+app.listen(app.get('port'), function() {
+	  console.log('Exchange rates api is running on port', app.get('port'));
 });
