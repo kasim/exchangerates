@@ -7,6 +7,12 @@ var grates = require('./lib/get-rates.js');
 
 app.set('port', (process.env.PORT || 5000));
 
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 router.get('/latest/all', function(req, res) {
     grates.getCache(dateFormat(new Date(), 'yyyy-mm-dd'));
     res.json({base: grates.fx.base, rates:grates.fx.rates, date:dateFormat(new Date(), 'yyyy-mm-dd')});
